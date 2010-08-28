@@ -131,8 +131,8 @@ mingw :
 #================================================================
 
 
-qupl.cgi : qupl.o
-	$(LDENV) $(CC) $(CFLAGS) -o $@ qupl.o $(LDFLAGS)
+qupl.cgi : qupl.o qutil.o
+	$(LDENV) $(CC) $(CFLAGS) -o $@ qupl.o qutil.o $(LDFLAGS)
 
 
 
