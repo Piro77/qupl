@@ -113,7 +113,7 @@ dist :
 
 distclean : clean
 	rm -rf Makefile config.cache config.log config.status autom4te.cache \
-	  qadmdir/* qupldir/* casket
+	  qupldir/* casket
 
 
 mingw :
