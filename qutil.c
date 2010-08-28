@@ -266,6 +266,20 @@ char *getsha1file(char *input)
 {
   return SHA1_File(input,NULL);
 }
+char *getpphash()
+{
+  static char retbuf[9];
+  char  *tmpp;
+  int pid;
+  pid = getpid();
+  srandom(time(NULL)*pid);
+  tmpp = cbsprintf("%X",random());
+  memcpy(retbuf,tmpp,8);
+  retbuf[8]=NULL;
+  cbfree(tmpp);
+  return retbuf;
+}
+
 char *getmd5str(char *input)
 {
     MD5_CTX md5;
@@ -417,14 +431,13 @@ char  *chksession(char *id,char *datadir)
 
 
 #define USER_DBFILE	".userdb.dp"
-#define	PPHASHSTR	"quplhash_"
 
 CBLIST *chkuser(char *id,char *pass,char *datadir)
 {
    DEPOT *depot;
    char  *userdb;
    char  *vbuf;
-   char  *ps,*hash;
+   char  *salt,*ps,*hash;
    int   vsiz;
   CBLIST *pairs;
 
@@ -441,9 +454,10 @@ CBLIST *chkuser(char *id,char *pass,char *datadir)
       senderror(404, "DB Open Error", "DB Open Error For Write .userdb.dp.");
       return NULL;
      }
-     ps = cbsprintf("%s%s","root",PPHASHSTR);
+     salt = getpphash();
+     ps = cbsprintf("%s%s","root",salt);
      hash = getmd5str(ps);
-     vbuf = cbsprintf("%s,1,%s",hash,"admin");
+     vbuf = cbsprintf("%s%s,1,%s",salt,hash,"admin");
      free(ps);
      free(hash);
      if(dpput(depot, "administrator", -1, vbuf, -1, DP_DOVER)==FALSE){
@@ -461,8 +475,11 @@ CBLIST *chkuser(char *id,char *pass,char *datadir)
     }
     pairs = cbsplit(vbuf,-1,",");
     free(userdb);
-    ps = cbsprintf("%s%s",pass,PPHASHSTR);
-    hash = getmd5str(ps);
+    salt = cbmemdup(cblistval(pairs,0,NULL),-1);
+    salt[8]=0;
+    ps = cbsprintf("%s%s",pass,salt);
+    hash = cbsprintf("%s%s",salt,getmd5str(ps));
+    cbfree(salt);
     if (strcmp(hash,cblistval(pairs,0,NULL))==0) {
       free(ps);
       return pairs;
