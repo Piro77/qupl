@@ -16,8 +16,8 @@ VPATH = @srcdir@
 PACKAGE = qdbm
 
 # Targets
-MYCGIS = qadm.cgi qupl.cgi qfts.cgi
-MYCONFS = qadm.conf qupl.conf qfts.conf
+MYCGIS = qupl.cgi
+MYCONFS = qupl.conf
 MYDOCS = cgispex.html cgispex-ja.html
 
 # Building binaries
@@ -131,16 +131,8 @@ mingw :
 #================================================================
 
 
-qadm.cgi : qadm.o
-	$(LDENV) $(CC) $(CFLAGS) -o $@ qadm.o $(LDFLAGS)
-
-
 qupl.cgi : qupl.o
 	$(LDENV) $(CC) $(CFLAGS) -o $@ qupl.o $(LDFLAGS)
-
-
-qfts.cgi : qfts.o
-	$(LDENV) $(CC) $(CFLAGS) -o $@ qfts.o $(LDFLAGS)
 
 
 
