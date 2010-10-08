@@ -889,7 +889,7 @@ int checkcandownload(char *hash)
       cbfree(vbuf);
       return ret;
   }
-  dpclose(vbuf);
+  dpclose(depot);
   cbfree(datestr);
 
   return 0;

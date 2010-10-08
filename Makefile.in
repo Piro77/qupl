@@ -16,7 +16,7 @@ VPATH = @srcdir@
 PACKAGE = qdbm
 
 # Targets
-MYCGIS = qupl.cgi
+MYCGIS = qupl.cgi qdwn.cgi
 MYCONFS = qupl.conf
 MYDOCS = cgispex.html cgispex-ja.html
 
@@ -134,6 +134,9 @@ mingw :
 qupl.cgi : qupl.o qutil.o
 	$(LDENV) $(CC) $(CFLAGS) -o $@ qupl.o qutil.o $(LDFLAGS)
 
+
+qdwn.cgi : qdwn.o qutil.o
+	$(LDENV) $(CC) $(CFLAGS) -o $@ qdwn.o qutil.o $(LDFLAGS)
 
 
 # END OF FILE
